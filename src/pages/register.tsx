@@ -52,18 +52,12 @@ const Register: React.FC<registerProps> = ({}) => {
                 label="Password"
               />
             </Box>
-            <Button
-              mt={4}
-              type="submit"
-              colorScheme="teal"
-              color="white"
-              isLoading={isSubmitting}
-            >
+            <Button mt={4} type="submit" isLoading={isSubmitting}>
               register
             </Button>
             <Box mt={3}>
               <NextLink href="/login">
-                <Link color="teal.500" fontSize="sm" fontWeight="thin">
+                <Link fontSize="sm" fontWeight="thin">
                   Sign In, In case you have one ?
                 </Link>
               </NextLink>

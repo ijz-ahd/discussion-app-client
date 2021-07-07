@@ -3,16 +3,14 @@ import { Box, Button, Flex, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../utils/isServer";
+import { useRouter as router } from "next/router";
 
-interface NavBarProps {}
-
-export const NavBar: React.FC<NavBarProps> = ({}) => {
+export const NavBar: React.FC<{}> = ({}) => {
+  const route = router();
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-
-  console.log("data: ", data);
 
   let body;
   if (fetching) {
@@ -21,45 +19,64 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     body = (
       <Box ml={"auto"}>
         <NextLink href="/login">
-          <Link color="black" fontWeight="medium" mr={4}>
+          <Link color="white" fontWeight="medium" mr={4}>
             login
           </Link>
         </NextLink>
 
         <NextLink href="/register">
-          <Link color="black" fontWeight="medium">
+          <Button
+            colorScheme="whiteAlpha"
+            size="sm"
+            color="white"
+            fontWeight="medium"
+          >
             register
-          </Link>
+          </Button>
         </NextLink>
       </Box>
     );
   } else {
     body = (
-      <Flex ml={"auto"} alignItems="center">
-        <Box mr={4} color="black" fontWeight="medium">
-          {data.me.username}
+      <div
+        style={{
+          display: "flex",
+          marginLeft: "auto",
+          alignItems: "center",
+        }}
+      >
+        <Box mr={4} color="white" fontWeight="medium">
+          {data.me.username.charAt(0).toUpperCase() + data.me.username.slice(1)}
         </Box>
         <Button
           size="sm"
           backgroundColor="whiteAlpha.500"
-          color="black"
+          color="white"
           fontWeight="medium"
           _hover={{ backgroundColor: "whiteAlpha.800", color: "black" }}
-          onClick={() => {
-            logout();
+          onClick={async () => {
+            await logout();
+            route.reload();
           }}
           isLoading={logoutFetching}
         >
           Logout
         </Button>
-      </Flex>
+      </div>
     );
   }
   return (
-    <Flex p={4} bg="tan" alignItems="center">
+    <Flex
+      position="sticky"
+      top={0}
+      zIndex={1}
+      p={4}
+      bg="blue.900"
+      alignItems="center"
+    >
       <NextLink href="/">
-        <Link color="black" fontWeight="extrabold">
-          Forum
+        <Link color="white" fontWeight="extrabold">
+          Discussion
         </Link>
       </NextLink>
       {body}
